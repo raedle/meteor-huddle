@@ -3,7 +3,7 @@
   "description": "Huddle - a client-side JavaScript API to develop novel mobile and multi-display applications.",
   "homepage": "https://bitbucket.org/raedle/meteor-huddle",
   "author": "Roman Raedle <firstname.lastname@outlook.com>",
-  "version": "0.9.1-1",
+  "version": "0.9.1-2",
   "git": "https://bitbucket.org/raedle/meteor-huddle.git",
   "packages": {
   }
