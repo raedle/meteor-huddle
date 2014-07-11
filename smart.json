@@ -2,8 +2,8 @@
   "name": "huddle",
   "description": "Huddle - a client-side JavaScript API to develop novel mobile and multi-display applications.",
   "homepage": "https://github.com/raedle/meteor-huddle",
-  "author": "Roman Raedle, Hans-Christian Jetter",
-  "version": "0.9.2-0",
+  "author": "Roman Raedle (http://romanraedle.com), Christian Jetter (http://www.cities.io/project/hans-christian-jetter/)",
+  "version": "0.9.2-1",
   "git": "https://github.com/raedle/meteor-huddle.git",
   "packages": {
   }
