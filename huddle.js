@@ -218,6 +218,7 @@ window.EventManager = (function()
  * }
  *
  * @author Roman Rädle [firstname.lastname@outlook.com] replace 'ä' with 'ae'
+ * @author Hans-Christian Jetter
  * @requires jQuery
  * @namespace Huddle
  * @param {int} Device id.
@@ -242,16 +243,17 @@ window.Huddle = (function ($) {
     var glyph;
 
     /**
-     * TODO Document me!!!
+     * Creates a Huddle client with an optional name as parameter. The client
+     * is set to automatically reconnect on error.
      *
-     * @param {string} name Client name. Does not necessarily need to be a unique name.
+     * @param {string} [name] Client name. Does not necessarily need to be a unique name.
      */
     this.client = function (name) {
         this.name = typeof name !== 'undefined' ? name : "";
 
         this.running = false;
         this.connected = false;
-        this.reconnect = false;
+        this.reconnect = true;
 
         this.reconnectTimeout = null;
 
