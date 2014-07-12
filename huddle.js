@@ -678,7 +678,7 @@ var Huddle = (function ($) {
      * @param {Object} object JSON object.
      */
     var sendJSONObject = function(type, object) {
-        var msg = JSON.stringify(object);
+        var msg = '"Data": {0}'.format(JSON.stringify(object));
         send(type, msg);
     }.bind(this);
 
