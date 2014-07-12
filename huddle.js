@@ -3,6 +3,7 @@
  * var awesomeWorld = "Hello {0}! You are {1}.".format("World", "awesome");
  *
  * TODO Enclose the format prototype function in HuddleClient JavaScript API.
+ * Source: http://stackoverflow.com/questions/1038746/equivalent-of-string-format-in-jquery
  */
 String.prototype.format = function () {
     var args = arguments;
@@ -13,27 +14,45 @@ String.prototype.format = function () {
     });
 };
 
-function namespace(namespaceString) {
-    var parts = namespaceString.split('.'),
-        parent = window,
-        currentPart = '';
+/* global Log */
+"use strict";
 
-    for(var i = 0, length = parts.length; i < length; i++) {
-        currentPart = parts[i];
-        parent[currentPart] = parent[currentPart] || {};
-        parent = parent[currentPart];
+/**
+ * Common functions.
+ *
+ * @author Roman Rädle
+ * @namespace Common
+ */
+var Common = (function() {
+
+  this.getDeviceType = function() {
+    var type = navigator.userAgent.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i);
+
+    var deviceType = 'unknown';
+    if (type) {
+        deviceType = type[0];
     }
 
-    return parent;
-};
+    return deviceType;
+  };
+
+  return this;
+})();
+
+// make Common globally available
+window.Common = Common;
+
+/* global Log */
 "use strict";
 
 /**
  * Gives us some nice debug convenience functions
  *
- * @namespace Debug
+ * @author Mario Schreiner
+ * @author Roman Rädle
+ * @namespace Log
  */
-window.Log = (function() {
+var Log = (function() {
 
   /**
    * true if info mode is on, otherwise false
@@ -130,15 +149,21 @@ window.Log = (function() {
     debug: debug
   };
 })();
+
+// make Log globally available
+window.Log = Log;
+
 /* global EventManager */
 "use strict";
 
 /**
  * Manages events throughout Connichiwa. Allows all parts of Connichiwa to register for and trigger events.
  *
+ * @author Mario Schreiner
+ * @author Roman Rädle
  * @namespace EventManager
  */
-window.EventManager = (function()
+var EventManager = (function()
 {
   /**
    * A dictionary where each entry represents a single event. The key is the event name. Each entry of the dictionary is an array of callbacks that should be called when the event is triggered.
@@ -191,6 +216,10 @@ window.EventManager = (function()
     trigger  : trigger
   };
 })();
+
+// make EventManager globally available
+window.EventManager = EventManager;
+
 /**
  * An instance of HuddleClient handles the connection to a Huddle engine through a
  * web socket connection. It offers properties to automatically reconnect on
@@ -217,13 +246,13 @@ window.EventManager = (function()
  *                           },
  * }
  *
- * @author Roman Rädle [firstname.lastname@outlook.com] replace 'ä' with 'ae'
+ * @author Roman Rädle
  * @author Hans-Christian Jetter
  * @requires jQuery
  * @namespace Huddle
  * @param {int} Device id.
  */
-window.Huddle = (function ($) {
+var Huddle = (function ($) {
 
     // set web socket
     var WebSocket = window.WebSocket || window.MozWebSocket;
@@ -364,10 +393,19 @@ window.Huddle = (function ($) {
 
             this.connected = true;
 
+            var deviceType = Common.getDeviceType();
+
             // set a short timeout before send the handshake (this avoids 'Uncaught InvalidStateError: Failed to execute 'send' on 'WebSocket': Still in CONNECTING state'.
             setTimeout(function () {
-                var content = '"Name": "{0}"'.format(this.name);
-                send("Handshake", content);
+                // var content = '"Name": "{0}"'.format(this.name);
+                // send("Handshake", content);
+
+                var handshake = {
+                  Name: this.name,
+                  DeviceType: deviceType
+                };
+
+                sendJSONObject("Handshake", handshake);
             }, 500);
 
             // start alive interval to avoid web socket from disconnect
@@ -619,7 +657,7 @@ window.Huddle = (function ($) {
     };
 
     /**
-     * Send message to Huddle engine.
+     * Send message to Huddle Engine.
      *
      * @this Huddle
      * @private
@@ -629,6 +667,19 @@ window.Huddle = (function ($) {
     var send = function (type, content) {
         var msg = '{{"Type": "{0}", {1}}}'.format(type, content);
         this.socket.send(msg);
+    }.bind(this);
+
+    /**
+     * Send JSON object stringified to Huddle Engine.
+     *
+     * @this Huddle
+     * @private
+     * @param {string} type Message type.
+     * @param {Object} object JSON object.
+     */
+    var sendJSONObject = function(type, object) {
+        var msg = JSON.stringify(object);
+        send(type, msg);
     }.bind(this);
 
     /**
@@ -645,3 +696,7 @@ window.Huddle = (function ($) {
 
     return this;
 }).call({}, jQuery); //sweet! we can set this in an IIFE by passing in a blank object literal using the call method
+
+// make Huddle globally available
+window.Huddle = Huddle;
+
