@@ -664,8 +664,8 @@ var Huddle = (function ($) {
             try {
                 content = JSON.stringify(msg);
             }
-            catch {
-                Log.error("Unable to JSON.stringify message: " + msg);
+            catch (error) {
+                Log.error("Unable to JSON.stringify message: " + error);
             }
         }
 
