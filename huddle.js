@@ -598,6 +598,7 @@ var Huddle = (function ($) {
           $('#huddle-register-container').remove();
       }
 
+      // send acknowledge back to server to indicate that message was received
       sendJSONObject("Acknowledge", data);
 
       EventManager.trigger("showColor", data);
@@ -657,7 +658,18 @@ var Huddle = (function ($) {
      * @param {string} msg Message content.
      */
     this.broadcast = function (event, msg) {
-        send(DataTypes.Message, '"Event": "{0}", "Data": {1}'.format(event, msg));
+
+        var content = msg;
+        if (typeof(msg) === 'object') {
+            try {
+                content = JSON.stringify(msg);
+            }
+            catch {
+                Log.error("Unable to JSON.stringify message: " + msg);
+            }
+        }
+
+        send(DataTypes.Message, '"Event": "{0}", "Data": {1}'.format(event, content));
         return this;
     };
 

@@ -46,10 +46,17 @@ if (Meteor.isClient) {
             console.log(presence);
         });
       })
-      .on("message", function(msg) {
+      .on("myMessage", function(msg) {
+        // this will print '{yell:"Hut! Hut! Hut!"}'
         console.log("Message: " + msg);
       });
     huddle.connect("huddle-orbiter.proxemicinteractions.org", <YOUR_ASSIGNED_HUDDLE_ORBITER_PORT>);
   });
 }
+```
+
+Huddle clients also can communicate with each other through broadcast message. A simple example of a message broadcast is shwon below. This example works with the client above.
+
+```javascript
+anotherHuddle.broadcast("myMessage", { yell: "Hut! Hut! Hut!" });
 ```
