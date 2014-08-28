@@ -39,9 +39,6 @@ var Common = (function() {
   return this;
 })();
 
-// make Common globally available
-window.Common = Common;
-
 /* global Log */
 "use strict";
 
@@ -150,9 +147,6 @@ var Log = (function() {
   };
 })();
 
-// make Log globally available
-window.Log = Log;
-
 /* global EventManager */
 "use strict";
 
@@ -217,9 +211,6 @@ var EventManager = (function()
   };
 })();
 
-// make EventManager globally available
-window.EventManager = EventManager;
-
 /**
  * An instance of HuddleClient handles the connection to a Huddle engine through a
  * web socket connection. It offers properties to automatically reconnect on
@@ -252,7 +243,7 @@ window.EventManager = EventManager;
  * @namespace Huddle
  * @param {int} Device id.
  */
-var Huddle = (function ($) {
+Huddle = (function ($) {
 
     // set web socket
     var WebSocket = window.WebSocket || window.MozWebSocket;
@@ -713,7 +704,3 @@ var Huddle = (function ($) {
 
     return this;
 }).call({}, jQuery); //sweet! we can set this in an IIFE by passing in a blank object literal using the call method
-
-// make Huddle globally available
-window.Huddle = Huddle;
-
