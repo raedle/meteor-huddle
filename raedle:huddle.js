@@ -246,7 +246,7 @@ var EventManager = (function()
 Huddle = (function ($) {
 
     // Huddle client version
-    this.version = "0.9.9";
+    this.version = "0.9.11";
 
     // set web socket
     var WebSocket = window.WebSocket || window.MozWebSocket;
@@ -280,8 +280,6 @@ Huddle = (function ($) {
             glyphId: null,
         };
         $.extend(this.options, options);
-
-        console.log(this.options);
 
         this.running = false;
         this.connected = false;
@@ -351,6 +349,16 @@ Huddle = (function ($) {
      * @param {int} [port=4711] Web socket server port.
      */
     this.connect = function (host, port) {
+
+        // security hack to ensure the socket is closed on window unload,
+        // e.g., caused by a page or meteor reload
+        window.onunload = function() {
+          if (this.socket) {
+            Log.info("Closing open web socket on window unload");
+            this.socket.close();
+          }
+        }.apply(this);
+
         this.host = host;
         this.port = typeof port !== 'undefined' ? port : 4711;
 
@@ -413,7 +421,7 @@ Huddle = (function ($) {
                 };
 
                 sendJSONObject("Handshake", handshake);
-            }.apply(this), 500);
+            }.bind(this), 500);
 
             // start alive interval to avoid web socket from disconnect
             aliveInterval = setInterval(sendAlive, 10000);
@@ -452,7 +460,7 @@ Huddle = (function ($) {
             if (this.running && this.reconnect && !this.reconnectTimeout) {
                 this.reconnectTimeout = setInterval(function () {
                     doConnect(this.host, this.port);
-                }.apply(this), 1000);
+                }.bind(this), 1000);
             }
         }.bind(this);
 
