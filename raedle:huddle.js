@@ -246,7 +246,7 @@ var EventManager = (function()
 Huddle = (function ($) {
 
     // Huddle client version
-    this.version = "0.9.11";
+    this.version = "0.9.12";
 
     // set web socket
     var WebSocket = window.WebSocket || window.MozWebSocket;
@@ -337,6 +337,9 @@ Huddle = (function ($) {
         }
 
         var image = canvas.toDataURL("image/png");
+
+        // delete canvas object
+        delete canvas;
 
         return image;
     }.bind(this);
@@ -448,6 +451,9 @@ Huddle = (function ($) {
         var onClose = function (event) {
             Log.info("Huddle Closed {0}".format(event));
 
+            // Remove glyph on close.
+            hideGlyph();
+
             // stop alive interval on error.
             if (aliveInterval) {
                 clearInterval(aliveInterval);
@@ -459,6 +465,13 @@ Huddle = (function ($) {
 
             if (this.running && this.reconnect && !this.reconnectTimeout) {
                 this.reconnectTimeout = setInterval(function () {
+                    // the socket still could be in a connection state if
+                    // connection takes to long. Therefore, close socket.
+                    if (this.socket) {
+                        this.socket.close();
+                        this.socket = null;
+                    }
+
                     doConnect(this.host, this.port);
                 }.bind(this), 1000);
             }
@@ -505,11 +518,15 @@ Huddle = (function ($) {
         if (data.Type) {
             switch (data.Type) {
                 case DataTypes.Glyph:
+                    hideGlyph();
+                    delete glyph;
+
                     this.id = data.Id;
                     glyph = createGlyph(data.GlyphData);
 
                     // DEBUG
-                    identifyDevice({ Value: true });
+                    // identifyDevice({ Value: true });
+                    showGlyph();
 
                     return;
                 case DataTypes.IdentifyDevice:
@@ -553,42 +570,56 @@ Huddle = (function ($) {
         }
 
         if (data.Value) {
-
-            // do not add a glyph container if it already exists
-            if ($('#huddle-glyph-container').length)
-                return;
-
-            var $glyphContainer = $('<div id="huddle-glyph-container"></div>').appendTo($('body'));
-            $glyphContainer.css({
-                "z-index": "10000",
-                "top": "0",
-                "left": "0",
-                "position": "fixed",
-                "background-color": "white",
-                "vertical-align": "bottom",
-                "margin-left": "auto",
-                "margin-right": "auto",
-                "width": "100%",
-                "height": "100%"
-            });
-
-            var $glyph = $glyphContainer.append('<div id="huddle-glyph-{0}"></div>'.format(this.id));
-            $glyph.css({
-                "left": "0",
-                "top": "0",
-                "width": "100%",
-                "height": "100%",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center",
-                "background-image": "url('" + glyph + "')"
-            });
+            showGlyph();
         }
         else {
-            $('#huddle-glyph-container').remove();
+            hideGlyph();
         }
 
         EventManager.trigger("identify", data);
+    }.bind(this);
+
+    /**
+     * Shows the Huddle glyph.
+     */
+    var showGlyph = function() {
+
+        // do not add a glyph container if it already exists
+        if ($('#huddle-glyph-container').length)
+            return;
+
+        var $glyphContainer = $('<div id="huddle-glyph-container"></div>').appendTo($('body'));
+        $glyphContainer.css({
+            "z-index": "10000",
+            "top": "0",
+            "left": "0",
+            "position": "fixed",
+            "background-color": "white",
+            "vertical-align": "bottom",
+            "margin-left": "auto",
+            "margin-right": "auto",
+            "width": "100%",
+            "height": "100%"
+        });
+
+        var $glyph = $('<div id="huddle-glyph-{0}"></div>'.format(this.id)).appendTo($glyphContainer);
+        $glyph.css({
+            "left": "0",
+            "top": "0",
+            "width": "100%",
+            "height": "100%",
+            "background-size": "contain",
+            "background-repeat": "no-repeat",
+            "background-position": "center",
+            "background-image": "url('" + glyph + "')"
+        });
+    }.bind(this);
+
+    /**
+     * Hides the Huddle glyph.
+     */
+    var hideGlyph = function() {
+        $('#huddle-glyph-container').remove();
     }.bind(this);
 
     /**
