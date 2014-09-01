@@ -245,6 +245,9 @@ var EventManager = (function()
  */
 Huddle = (function ($) {
 
+    // Huddle client version
+    this.version = "0.9.8";
+
     // set web socket
     var WebSocket = window.WebSocket || window.MozWebSocket;
 
@@ -267,16 +270,24 @@ Huddle = (function ($) {
      * Creates a Huddle client with an optional name as parameter. The client
      * is set to automatically reconnect on error.
      *
-     * @param {string} [name] Client name. Does not necessarily need to be a unique name.
+     * @param {Object} [options] Client options. (e.g., name: does not
+     * necessarily need to be a unique name.)
      */
-    this.client = function (name) {
-        this.name = typeof name !== 'undefined' ? name : "";
+    this.client = function (options) {
+
+        this.options = {
+            name: "undefined",
+            glyphId: null,
+        };
+        $.extend(this.options, options);
 
         this.running = false;
         this.connected = false;
         this.reconnect = true;
 
         this.reconnectTimeout = null;
+
+        this.identified = false;
 
         return this;
     };
@@ -393,12 +404,14 @@ Huddle = (function ($) {
                 // send("Handshake", content);
 
                 var handshake = {
-                  Name: this.name,
-                  DeviceType: deviceType
+                  Name: this.options.name,
+                  GlyphId: this.options.glyphId,
+                  DeviceType: deviceType,
+                  Options: this.options,
                 };
 
                 sendJSONObject("Handshake", handshake);
-            }, 500);
+            }.apply(this), 500);
 
             // start alive interval to avoid web socket from disconnect
             aliveInterval = setInterval(sendAlive, 10000);
@@ -437,7 +450,7 @@ Huddle = (function ($) {
             if (this.running && this.reconnect && !this.reconnectTimeout) {
                 this.reconnectTimeout = setInterval(function () {
                     doConnect(this.host, this.port);
-                }, 1000);
+                }.apply(), 1000);
             }
         }.bind(this);
 
@@ -519,6 +532,16 @@ Huddle = (function ($) {
      * @param {Object} data The digital data as object literal.
      */
     var identifyDevice = function (data) {
+
+        if (this.identified != !data.Value) {
+            this.identified = !data.Value;
+
+            if (this.identified)
+              EventManager.trigger("devicefound");
+            else
+              EventManager.trigger("devicelost");
+        }
+
         if (data.Value) {
 
             // do not add a glyph container if it already exists
@@ -527,6 +550,7 @@ Huddle = (function ($) {
 
             var $glyphContainer = $('<div id="huddle-glyph-container"></div>').appendTo($('body'));
             $glyphContainer.css({
+                "z-index": "10000",
                 "top": "0",
                 "left": "0",
                 "position": "fixed",
@@ -704,4 +728,3 @@ Huddle = (function ($) {
 
     return this;
 }).call({}, jQuery); //sweet! we can set this in an IIFE by passing in a blank object literal using the call method
-
