@@ -246,7 +246,7 @@ var EventManager = (function()
 Huddle = (function ($) {
 
     // Huddle client version
-    this.version = "0.9.8";
+    this.version = "0.9.9";
 
     // set web socket
     var WebSocket = window.WebSocket || window.MozWebSocket;
@@ -280,6 +280,8 @@ Huddle = (function ($) {
             glyphId: null,
         };
         $.extend(this.options, options);
+
+        console.log(this.options);
 
         this.running = false;
         this.connected = false;
@@ -450,7 +452,7 @@ Huddle = (function ($) {
             if (this.running && this.reconnect && !this.reconnectTimeout) {
                 this.reconnectTimeout = setInterval(function () {
                     doConnect(this.host, this.port);
-                }.apply(), 1000);
+                }.apply(this), 1000);
             }
         }.bind(this);
 
@@ -598,6 +600,7 @@ Huddle = (function ($) {
 
             var $glyphContainer = $('<div id="huddle-register-container"></div>').appendTo($('body'));
             $glyphContainer.css({
+                "z-index": "10000",
                 "top": "0",
                 "left": "0",
                 "position": "fixed",
@@ -728,3 +731,4 @@ Huddle = (function ($) {
 
     return this;
 }).call({}, jQuery); //sweet! we can set this in an IIFE by passing in a blank object literal using the call method
+

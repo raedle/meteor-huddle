@@ -40,6 +40,12 @@ if (Meteor.isClient) {
           console.log(presence);
       });
     })
+    .on("devicefound", function() {
+      console.log("devicefound");
+    })
+    .on("devicelost", function() {
+      console.log("devicelost");
+    })
     .on("myMessage", function(msg) {
       // this will print messages sent with broadcast function. See example below '{yell:"Hut! Hut! Hut!"}'
       console.log("Message: " + msg);
