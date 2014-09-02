@@ -1,6 +1,6 @@
 Package.describe({
   summary: "Huddle - a client-side JavaScript API to develop novel mobile and multi-display applications.",
-  version: "0.9.12",
+  version: "0.9.13",
   git: "https://github.com/raedle/meteor-huddle.git"
 });
 
