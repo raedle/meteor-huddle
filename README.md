@@ -16,7 +16,7 @@ Install Meteor platform http://www.meteor.com
 
 ## How to use with HuddleOrbiter
 1. Add Huddle client connection and event handling to your `myhuddle-app.js` file (see example below).
-2. Go to `http://huddle-orbiter.proxemicinteractions.org:3000` log in to your account or create an account if you are a first time user.
+2. Go to `http://orbiter.huddlelamp.org` log in to your account or create an account if you are a first time user.
 3. Get the port that was assigned with your HuddleOrbiter account and add it to the JavaScript snippet added before under point 1.
 4. `$ meteor`
 5. Open `http://localhost:3000` and the Huddle client will connect to your HuddleOrbiter account. If successful, the device will appear under the Orbit tab in the HuddleOrbiter. A second device will appear if you open `http://localhost:3000` again in a different browser tab or new browser window. Continue with device 3 and so on.
@@ -50,7 +50,7 @@ if (Meteor.isClient) {
       // this will print messages sent with broadcast function. See example below '{yell:"Hut! Hut! Hut!"}'
       console.log("Message: " + msg);
     });
-  huddle.connect("huddle-orbiter.proxemicinteractions.org", <YOUR_ASSIGNED_HUDDLE_ORBITER_PORT>);
+  huddle.connect("orbiter.huddlelamp.org", <YOUR_ASSIGNED_HUDDLE_ORBITER_PORT>);
 }
 ```
 
