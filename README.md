@@ -2,7 +2,9 @@
 
 Huddle is a client-side JavaScript API to develop multi-device and multi-display applications. It allows you to turn arbitrary tables or flat surfaces into an interactive surface. To get a basic idea of what Huddle allows you to create with a tabletop of mobile devices, look at the [demo video](http://youtu.be/XkmwG588zp0) on YouTube.
 
-[![HuddleLamp: Spatially-Aware Mobile Displays for Ad-hoc Around-the-Table Collaboration](http://raedle.github.io/HuddleLamp-YouTube.png)](http://www.youtube.com/watch?v=XkmwG588zp0)
+<a href="http://www.youtube.com/watch?v=XkmwG588zp0" target="_blank" alt="HuddleLamp: Spatially-Aware Mobile Displays for Ad-hoc Around-the-Table Collaboration">
+  <img src="http://raedle.github.io/HuddleLamp-YouTube.png" alt="HuddleLamp: Spatially-Aware Mobile Displays for Ad-hoc Around-the-Table Collaboration" />
+</a>
 
 In order to achieve this, a tracking engine is required. One incarnation of such a tracking engine is [HuddleLamp](http://huddlelamp.org). HuddleLamp is a desk lamp with an integrated low cost depth camera (e.g. the Creative Senz3d by Intel). It enables users to compose interactive tables (or other multi-device user interfaces) from their tablets and smart phones just by putting them under this desk lamp. HuddleLamp tracks multiple mobile devices on a table, automatically identifies them, and sends their location and orientation and the location and orientation of neighbouring devices as proximity data to each device. Find detailed information on the required hardware and tracking software on our [HuddleLamp](http://huddlelamp.org) website.
 
