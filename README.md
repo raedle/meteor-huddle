@@ -2,7 +2,7 @@
 
 Huddle is a client-side JavaScript API to develop multi-device and multi-display applications. It allows you to turn arbitrary tables or flat surfaces into an interactive surface. To get a basic idea of what Huddle allows you to create with a tabletop of mobile devices, look at the [demo video](http://youtu.be/XkmwG588zp0) on YouTube.
 
-<iframe width="560" height="315" src="//www.youtube.com/embed/XkmwG588zp0" frameborder="0" allowfullscreen></iframe>
+[![HuddleLamp: Spatially-Aware Mobile Displays for Ad-hoc Around-the-Table Collaboration](http://raedle.github.io/HuddleLamp-YouTube.png)](http://www.youtube.com/watch?v=XkmwG588zp0)
 
 In order to achieve this, a tracking engine is required. One incarnation of such a tracking engine is [HuddleLamp](http://huddlelamp.org). HuddleLamp is a desk lamp with an integrated low cost depth camera (e.g. the Creative Senz3d by Intel). It enables users to compose interactive tables (or other multi-device user interfaces) from their tablets and smart phones just by putting them under this desk lamp. HuddleLamp tracks multiple mobile devices on a table, automatically identifies them, and sends their location and orientation and the location and orientation of neighbouring devices as proximity data to each device. Find detailed information on the required hardware and tracking software on our [HuddleLamp](http://huddlelamp.org) website.
 
@@ -25,6 +25,9 @@ Install Meteor platform http://www.meteor.com
 2. `$ cd myhuddle-app`
 3. `$ meteor add huddle:client`
 4. Add optional packages [huddle:canvas](https://atmospherejs.com/scarrobin/huddlecanvas) and [huddle:object](https://atmospherejs.com/jay5/huddleobject).
+
+##### Current Build Status
+[![Build Status](https://travis-ci.org/raedle/meteor-huddle.svg?branch=master)](https://travis-ci.org/raedle/meteor-huddle)
 
 ### Connect Devices to HuddleOrbiter or HuddleLamp
 This JavaScript example code (myhuddle-app.js) examplifies the usage of the Huddle JavaScript API. It creates a Huddle client and registers function callbacks on incoming proximity data, devicefound and devicelost events, and incoming client messages. In the proximity callback function it prints devices' x- and y-location and orientation in the console. In addition it prints the data object for each neighbouring device, if any, in the console. When a device is tracked, the devicefound function is called and devicelost when the device gets lost. Huddle clients can also receive messages (in JSON format) from other connected clients. An example on how to send messages is below.
