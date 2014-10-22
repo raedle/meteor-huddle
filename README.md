@@ -1,3 +1,6 @@
+Huddle Client API
+============
+
 # Huddle - turn your phones and tablets into an improvised interactive table
 
 Huddle is a client-side JavaScript API to develop multi-device and multi-display applications. It allows you to turn arbitrary tables or flat surfaces into an interactive surface. To get a basic idea of what Huddle allows you to create with a tabletop of mobile devices, look at the [demo video](http://youtu.be/XkmwG588zp0) on YouTube.

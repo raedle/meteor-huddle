@@ -11,16 +11,16 @@ Package.onUse(function(api) {
   // used external packages
   api.use('jquery', 'client');
 
-  // allow referencing packages to use jQuery
+  // allow to use referenced packages
   api.imply('jquery', 'client');
 
-  // export Huddle object on client side
+  // export objects
   api.export('Common', 'client');
   api.export('Log', 'client');
   api.export('EventManager', 'client');
   api.export('Huddle', 'client');
 
-  // Huddle API files
+  // API files
   api.addFiles('api/huddle:common.js', 'client');
   api.addFiles('api/huddle:log.js', 'client');
   api.addFiles('api/huddle:eventmanager.js', 'client');
@@ -29,6 +29,6 @@ Package.onUse(function(api) {
 
 Package.onTest(function(api) {
   api.use('tinytest');
-  api.use('huddle:core');
-  api.addFiles('test/huddle:core-tests.js');
+  api.use('huddle:client');
+  api.addFiles('test/huddle:client-tests.js');
 });
