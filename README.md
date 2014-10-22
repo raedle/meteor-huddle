@@ -26,16 +26,6 @@ Install Meteor platform http://www.meteor.com
 3. `$ meteor add huddle:client`
 4. Add optional packages [huddle:canvas](https://atmospherejs.com/scarrobin/huddlecanvas) and [huddle:object](https://atmospherejs.com/jay5/huddleobject).
 
-## Example Using HuddleOrbiter
-
-1. Add Huddle client connection and event handling to your `myhuddle-app.js` file (see example below).
-2. Go to `http://orbiter.huddlelamp.org` log in to your account or create an account if you are a first time user.
-3. Get the port that was assigned with your HuddleOrbiter account and add it to the JavaScript snippet added before under point 1.
-4. `$ meteor`
-5. Open `http://localhost:3000` and the Huddle client will connect to your HuddleOrbiter account. If successful, the device will appear under the Orbit tab in the HuddleOrbiter. A second device will appear if you open `http://localhost:3000` again in a different browser tab or new browser window. Continue with device 3 and so on.
-6. Now the Huddle client receives proximity data that you can work with.
-7. Enjoy or if you don't then give us feedback!
-
 ### Connect Devices to HuddleOrbiter or HuddleLamp
 This JavaScript example code (myhuddle-app.js) examplifies the usage of the Huddle JavaScript API. It creates a Huddle client and registers function callbacks on incoming proximity data, devicefound and devicelost events, and incoming client messages. In the proximity callback function it prints devices' x- and y-location and orientation in the console. In addition it prints the data object for each neighbouring device, if any, in the console. When a device is tracked, the devicefound function is called and devicelost when the device gets lost. Huddle clients can also receive messages (in JSON format) from other connected clients. An example on how to send messages is below.
 
@@ -68,12 +58,41 @@ if (Meteor.isClient) {
 }
 ```
 
-### Device to Devices Communication
+### Proximity Data - Device Location and Orientation
+A Huddle client handles the connection to a Huddle tracking engine through a web socket connection. It offers properties to automatically reconnect on connection errors. The device will get a continues stream of proximity data if a connection to Huddle engine is established. An example on how the `Proximity` data object looks like is below.
+
+```
+{
+  Type: "TYPE",               // a string e.g., Device or Hand
+  Identity: "IDENTITY",       // a string that represents the Huddle id
+  Location: double[3],        // values are [0;1], Location[0] = x, Location[1] = y, Location[2] = z (in current tracking the z-value is always 0.0)
+  Orientation: double,        // value is [0;360]
+  Distance: double,           // value is [0;1] and only set for presences in Presences property.
+  Movement: double,           // not yet implemented
+  Presences: Proximity[],     // Neighbouring devices proximity data
+  RgbImageToDisplayRatio: {   // The aspect ratio on how many times a device's screen fits into the tracked region providing independent values for X- and Y-axis
+                            X: double,
+                            Y: double
+                          },
+}
+```
+
+### Broadcast Messages - Device to Devices Communication
 Huddle clients also can communicate with each other through broadcast message. A simple example of a message broadcast is shwon below. This example works with the client above.
 
 ```javascript
 anotherHuddleClient.broadcast("myMessage", { yell: "Hut! Hut! Hut!" });
 ```
+
+## Example Using HuddleOrbiter
+
+1. Add Huddle client connection and event handling to your myhuddle-app.js file (see example below).
+2. Go to [http://orbiter.huddlelamp.org](http://orbiter.huddlelamp.org) and log in to your account or create an account if you are a first time user.
+3. Get the port that was assigned with your HuddleOrbiter account and replace `<YOUR_ASSIGNED_HUDDLE_ORBITER_PORT>` with your port in the JavaScript snippet added before under point 1.
+4. Run meteor: `$ meteor`
+5. Open [http://localhost:3000](http://localhost:3000) and the Huddle client will connect to your HuddleOrbiter account. If successful, the device will appear under the Orbit tab in the HuddleOrbiter. A second device will appear if you open [http://localhost:3000](http://localhost:3000) again in a second browser tab or second browser window. Continue with device 3 and so on.
+6. Now the Huddle clients receive proximity data.
+7. Enjoy it or not. Give us feedback in both cases! ;)
 
 ## License
 This software is released under MIT license. Copyright is held by HuddleLamp and refers to the authors of this package, namely Roman Rädle and Hans-Christian Jetter.
