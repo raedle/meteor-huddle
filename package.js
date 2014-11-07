@@ -1,7 +1,7 @@
 Package.describe({
   name: 'huddle:client',
   summary: "Huddle - a client-side JavaScript API to develop novel mobile and multi-display applications.",
-  version: "0.9.14",
+  version: "0.9.15",
   git: "https://github.com/raedle/meteor-huddle.git"
 });
 
@@ -19,6 +19,9 @@ Package.onUse(function(api) {
   api.export('Log', 'client');
   api.export('EventManager', 'client');
   api.export('Huddle', 'client');
+
+  // Style
+  api.addFiles('css/huddle:client.css', 'client');
 
   // API files
   api.addFiles('api/huddle:common.js', 'client');

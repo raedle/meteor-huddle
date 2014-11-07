@@ -375,29 +375,10 @@ Huddle = (function ($) {
         if ($('#huddle-glyph-container').length)
             return;
 
-        var $glyphContainer = $('<div id="huddle-glyph-container"></div>').appendTo($('body'));
-        $glyphContainer.css({
-            "z-index": "10000",
-            "top": "0",
-            "left": "0",
-            "position": "fixed",
-            "background-color": "white",
-            "vertical-align": "bottom",
-            "margin-left": "auto",
-            "margin-right": "auto",
-            "width": "100%",
-            "height": "100%"
-        });
+        var $glyphContainer = $('<div id="huddle-glyph-container" class="huddle-glyph-container"></div>').appendTo($('body'));
 
-        var $glyph = $('<div id="huddle-glyph-{0}"></div>'.format(this.id)).appendTo($glyphContainer);
+        var $glyph = $('<div id="huddle-glyph-{0}" class="huddle-glyph"></div>'.format(this.id)).appendTo($glyphContainer);
         $glyph.css({
-            "left": "0",
-            "top": "0",
-            "width": "100%",
-            "height": "100%",
-            "background-size": "contain",
-            "background-repeat": "no-repeat",
-            "background-position": "center",
             "background-image": "url('" + glyph + "')"
         });
     }.bind(this);
@@ -424,18 +405,9 @@ Huddle = (function ($) {
             if ($('#huddle-register-container').length)
                 return;
 
-            var $glyphContainer = $('<div id="huddle-register-container"></div>').appendTo($('body'));
+            var $glyphContainer = $('<div id="huddle-register-container" class="huddle-register-container"></div>').appendTo($('body'));
             $glyphContainer.css({
-                "z-index": "10000",
-                "top": "0",
-                "left": "0",
-                "position": "fixed",
                 "background-color": data.Color,
-                "vertical-align": "bottom",
-                "margin-left": "auto",
-                "margin-right": "auto",
-                "width": "100%",
-                "height": "100%"
             });
       }
       else {
